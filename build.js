@@ -19,6 +19,11 @@ const APPS = [
     title: '2048',
     description: '방향키(또는 스와이프)로 숫자 타일을 밀어서 합치는 퍼즐 게임. 점수판 포함.',
   },
+  {
+    name: 'pomodoro',
+    title: '뽀모도로 타이머',
+    description: '집중 시간과 쉬는 시간을 슬라이더로 직접 조정할 수 있는 뽀모도로 타이머.',
+  },
 ];
 
 function copyAppAssets(appName) {

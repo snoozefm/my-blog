@@ -1,0 +1,215 @@
+:root {
+  --board-bg: #bbada0;
+  --cell-bg: rgba(238, 228, 218, 0.35);
+  --page-bg: #faf8ef;
+  --text-dark: #776e65;
+  --gap: 3%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--text-dark);
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 24px 12px 48px;
+}
+
+.game-container {
+  width: min(90vw, 90vh, 500px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: min(12vw, 3rem);
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.scores {
+  display: flex;
+  gap: 8px;
+}
+
+.score-box {
+  background: var(--board-bg);
+  color: #eee4da;
+  border-radius: 6px;
+  padding: 6px 14px;
+  min-width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.score-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.instructions {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  flex: 1 1 200px;
+}
+
+.btn {
+  background: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: #9c8a76;
+}
+
+.board-wrapper {
+  width: 100%;
+}
+
+.board {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--board-bg);
+  border-radius: 8px;
+  padding: var(--gap);
+  touch-action: none;
+}
+
+.grid-cells {
+  position: absolute;
+  inset: var(--gap);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: var(--gap);
+}
+
+.grid-cell {
+  background: var(--cell-bg);
+  border-radius: 6px;
+}
+
+.tile-layer {
+  position: absolute;
+  inset: var(--gap);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: var(--gap);
+}
+
+.tile {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: min(8vw, 2.2rem);
+  background: #eee4da;
+  color: var(--text-dark);
+  transition: top 0.12s ease-in-out, left 0.12s ease-in-out;
+  animation: tile-appear 0.15s ease-in-out;
+}
+
+.tile-merged {
+  animation: tile-pop 0.15s ease-in-out;
+}
+
+@keyframes tile-appear {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes tile-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.tile-2 { background: #eee4da; color: var(--text-dark); }
+.tile-4 { background: #ede0c8; color: var(--text-dark); }
+.tile-8 { background: #f2b179; color: #f9f6f2; }
+.tile-16 { background: #f59563; color: #f9f6f2; }
+.tile-32 { background: #f67c5f; color: #f9f6f2; }
+.tile-64 { background: #f65e3b; color: #f9f6f2; }
+.tile-128 { background: #edcf72; color: #f9f6f2; font-size: min(7vw, 1.9rem); }
+.tile-256 { background: #edcc61; color: #f9f6f2; font-size: min(7vw, 1.9rem); }
+.tile-512 { background: #edc850; color: #f9f6f2; font-size: min(7vw, 1.9rem); }
+.tile-1024 { background: #edc53f; color: #f9f6f2; font-size: min(6vw, 1.6rem); }
+.tile-2048 { background: #edc22e; color: #f9f6f2; font-size: min(6vw, 1.6rem); }
+.tile-super { background: #3c3a32; color: #f9f6f2; font-size: min(5.5vw, 1.4rem); }
+
+.overlay[hidden] {
+  display: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 228, 218, 0.73);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.overlay-message {
+  margin: 0;
+  font-size: min(8vw, 2.4rem);
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.overlay-buttons {
+  display: flex;
+  gap: 10px;
+}

@@ -9,7 +9,27 @@ const { excerptFromHtml } = require('./lib/html-utils');
 const ROOT = __dirname;
 const POSTS_DIR = path.join(ROOT, 'posts');
 const PUBLIC_DIR = path.join(ROOT, 'public');
+const APPS_DIR = path.join(ROOT, 'apps');
 const DIST_DIR = path.join(ROOT, 'dist');
+
+// 미니 웹앱 포트폴리오 목록. 새 앱을 Embed할 때 여기에 항목을 추가한다.
+const APPS = [
+  {
+    name: '2048',
+    title: '2048',
+    description: '방향키(또는 스와이프)로 숫자 타일을 밀어서 합치는 퍼즐 게임. 점수판 포함.',
+  },
+];
+
+function copyAppAssets(appName) {
+  const srcDir = path.join(APPS_DIR, appName);
+  const destDir = path.join(DIST_DIR, 'apps', appName);
+  fs.mkdirSync(destDir, { recursive: true });
+  const files = fs.readdirSync(srcDir).filter((f) => /\.(html|css|js)$/.test(f));
+  for (const file of files) {
+    fs.copyFileSync(path.join(srcDir, file), path.join(destDir, file));
+  }
+}
 
 function deriveSlug(filename, data) {
   if (data.slug) return data.slug;
@@ -45,13 +65,17 @@ function build() {
     fs.writeFileSync(path.join(DIST_DIR, 'posts', `${post.slug}.html`), html, 'utf8');
   }
 
-  const listBodyHtml = renderListPage({ posts });
+  const listBodyHtml = renderListPage({ posts, apps: APPS });
   const listHtml = renderLayout({ title: 'My Blog', description: '', bodyHtml: listBodyHtml });
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), listHtml, 'utf8');
 
   fs.cpSync(PUBLIC_DIR, DIST_DIR, { recursive: true });
 
-  console.log(`빌드 완료: 글 ${posts.length}개 + index.html`);
+  for (const app of APPS) {
+    copyAppAssets(app.name);
+  }
+
+  console.log(`빌드 완료: 글 ${posts.length}개, 웹앱 ${APPS.length}개 + index.html`);
 }
 
 build();
